@@ -1,15 +1,8 @@
-import {ADD, MAKE_ORDER, RESET, SUB} from "../actions/actionsType";
+import {ADD, GET_ITEMS_TO_REDUX, MAKE_ORDER, RESET, SUB} from "../actions/actionsType";
 
 const initialState = {
     isEmpty: true,
-    store: [
-        {name: "Яблоко", count: 0},
-        {name: "Молоко", count: 0},
-        {name: "Яйца", count: 0},
-        {name: "Хлеб", count: 0},
-        {name: "Рис", count: 0},
-        {name: "Сода", count: 0},
-    ],
+    store: [],
 }
 
 export default function orders(state = initialState, action) {
@@ -40,6 +33,11 @@ export default function orders(state = initialState, action) {
                 ...initialState
             }
         }
+        case GET_ITEMS_TO_REDUX:
+            return {
+                ...state,
+                store: action.payload
+            }
         default:
             return state
     }

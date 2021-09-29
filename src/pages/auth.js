@@ -5,6 +5,7 @@ import Login from "../components/Forms/Login";
 import Logout from "../components/Logout";
 import {connect} from "react-redux";
 import {AlertContext} from "../context/alert/alertContext";
+import Profile from "../components/profile";
 
 const Auth = (props) => {
 
@@ -25,11 +26,10 @@ const Auth = (props) => {
         }
     }
 
-    if (!props.auth.isLogin) {
-        console.log("hello")
-        return (
-            <div className="container mt-5">
-                <div className="buttons mb-5">
+    return (
+        <div className="container mt-5">
+            {!props.auth.user
+                ? <> <div className="buttons mb-5">
                     <AuthButton
                         type={"REG"}
                         active={state.register}
@@ -50,11 +50,11 @@ const Auth = (props) => {
                     ? <Registration onSuccessReg={show}/>
                     : <Login/>
                 }
-            </div>
-        )
-    } else {
-        return <Logout></Logout>
-    }
+                </>
+                : <Profile/>
+            }
+        </div>
+    )
 
 }
 

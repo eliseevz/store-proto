@@ -114,7 +114,9 @@ const Login = (props) => {
         //     password: state.formControls.password.value,
         //     returnSecureToken: true
         // }
-        props.login(state.formControls.email.value, state.formControls.password.value)
+        if (state.formControls.email.valid && state.formControls.password.valid) {
+            props.login(state.formControls.email.value, state.formControls.password.value)
+        }
     }
 
     return (

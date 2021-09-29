@@ -18,17 +18,19 @@ export default function Auth(email, password, show) {
             email,
             password,
             orders: {
-                currentId: 1,
+                isEmpty: true,
             },
             username: null,
             isAdmin: false
         }
-        const response2 = await axios.post("https://online-store-prototype-c73d8-default-rtdb.firebaseio.com/users.json", newUserData)
-        } catch (e) {
-            console.log(e)
-        } finally {
+            const response2 = await axios.post("https://online-store-prototype-c73d8-default-rtdb.firebaseio.com/users.json", newUserData)
             show("Регистрация прошла успешно!", "success")
             dispatch(login(email, password))
+        } catch (e) {
+            console.log({...e}, " this")
+            show("Такой пользователь уже есть", "danger")
+        } finally {
+
         }
     }
 }
@@ -42,6 +44,8 @@ export function login(email, password) {
         }
         const response = await axios.post("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBiRmQAjj4m-4K6AbMw_Y-pssvLXHPlo-s", authData)
         const data = response.data
+
+        console.log("login data: ", data)
 
         const expirationDate = new Date(new Date().getTime() + data.expiresIn)
 
@@ -58,7 +62,6 @@ export function login(email, password) {
 
 export async function getUserToRedux(dispatch, userId) {
     const response = await axios.get("https://online-store-prototype-c73d8-default-rtdb.firebaseio.com/users.json")
-    console.log("this is response from getUserToRedux", response)
     let user
     const userData = Object.keys(response.data).forEach( userKey => {
         if (response.data[userKey].userId === userId) {

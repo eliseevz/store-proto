@@ -9,7 +9,7 @@ export const AlertState = ({children}) => {
 
     const hide = () => dispatch({type: HIDE_ALERT})
 
-    const show = (text, type = "secondary") => {
+    const show = (text, type = "secondary", time=3000) => {
         console.log(' this is show from alertState')
         dispatch ({
             type: SHOW_ALERT,
@@ -17,7 +17,7 @@ export const AlertState = ({children}) => {
         })
         setTimeout(()=> {
             hide()
-        }, 3000)
+        }, time)
     }
 
     const showHandler = (text, type) => {

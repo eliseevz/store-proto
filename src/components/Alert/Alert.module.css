@@ -1,8 +1,9 @@
 .myAlert {
-    position: absolute;
+    position: fixed;
     bottom: 100px;
     left: 50%;
     transform: translateX(-50%);
     height: 70px;
     padding: 0 70px;
+    z-index: 1000000000;
 }

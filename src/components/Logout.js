@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {logout} from "../redux/actions/auth";
 
 const Logout = (props) => {
-    return <button onClick={props.logout} className="btn btn-danger">Выйти</button>
+    return <button onClick={props.logout} className="btn btn-danger">{props.children}</button>
 }
 
 const mapDispatchToProps = (dispatch) => {

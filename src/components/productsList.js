@@ -1,28 +1,58 @@
-import React from "react"
+import React, {useContext, useEffect, useState} from "react"
 import {connect} from "react-redux";
 import {add, reset, sub} from "../redux/actions/actions";
+import api from "../API/products.api"
+import Loader from "./UI/Loader/Loader";
+import ItemCard from "./ItemCard/itemCard";
+import {addToCart} from "../redux/actions/cart";
+import FilterBar from "./FilterBar/filterBar";
+import _ from "lodash"
+import {AlertContext} from "../context/alert/alertContext";
 
-const ProductsList = (props) => (
-    <div className="container">
-        <div className="row">
-            { props.store.map( (item, index) => (
-                <div key={index} className="col-sm-3 card text-dark bg-light m-4">
-                    <div className="card-header">{item.name}</div>
-                    <div className="card-body">
-                        <button onClick={() => props.onAdd(item.name)} className="badge bg-dark">+</button>
-                        <span className="badge bg-light" style={{fontSize: 18, color: "#000"}}>{item.count}</span>
-                        <button onClick={() => props.onSub(item.name)} className="badge bg-dark">-</button>
-                    </div>
-                    <span onClick={()=> props.onReset(item.name) } style={{}} className="btn rounded-pill bg-danger mb-3 fs-7 text-light">Сбросить</span>
-                </div>
-            )) }
+const ProductsList = (props) => {
+
+    const getStoreInfoFromApi = async () => {
+        const response = await fetchAll()
+    }
+
+    const {fetchAll} = api
+
+    const [selectedCategory, setCategory] = useState("Все")
+
+    const selectCategoryHandler = (name) => {
+        setCategory(name)
+        console.log(name)
+    }
+
+    const [filter, setFilter] = useState("default")
+
+    const selectFilterHandler = (name) => {
+        setFilter(name)
+    }
+
+    const cropStore = filter !== "default"
+        ? _.orderBy(props.store, [filter.name], [filter.order])
+        : props.store
+
+    return (
+        <div className="container flex-column d-flex justify-content-start mt-3 p-5">
+            <FilterBar selectFilterHandler={selectFilterHandler} selectCategoryHandler={selectCategoryHandler} />
+            <div className="row d-flex justify-content-center">
+                { cropStore.length !== 0
+                ? cropStore.map( (item, index) => {
+                    return <ItemCard addToCart={props.addToCart} selectedCategory={selectedCategory} key={index} item={item}/>
+                 })
+                : <Loader/>
+                }
+            </div>
         </div>
-    </div>
-)
+    )
+}
 
 const mapStateToProps = (state) => {
     return {
-        store: state.products.store
+        store: state.products.store,
+        cart: state.cart
     }
 }
 
@@ -30,7 +60,8 @@ const mapDispatchToProps = (dispatch, state) => {
     return {
         onAdd: (name) => dispatch(add(name, state)),
         onSub: (name) => dispatch(sub(name, state)),
-        onReset: (name) => dispatch(reset(name))
+        onReset: (name) => dispatch(reset(name)),
+        addToCart: (item, show) => dispatch(addToCart(item,show))
     }
 }
 

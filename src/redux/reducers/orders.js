@@ -1,19 +1,8 @@
-import {ADD, MAKE_ORDER, ORDERS_TO_REDUX, RESET, SUB} from "../actions/actionsType";
-import {act} from "@testing-library/react";
+import {ADD, MAKE_ORDER, ON_SHOW_CHANGE, ORDERS_TO_REDUX, RESET, SUB} from "../actions/actionsType";
 
 const initialState = {
     currentId: 1,
-    orders: [
-        // {
-        //     id: "0001",
-        //     products: [
-        //         {name: "Яблоко", count: 2},
-        //         {name: "Молоко", count: 5},
-        //     ],
-        //     orderDate: "02.21.2021",
-        //     orderTime: "15:53",
-        // }
-    ]
+    orders: []
 }
 
 export default function orders(state = initialState, action) {
@@ -24,6 +13,15 @@ export default function orders(state = initialState, action) {
             return {
                 ...state,
                 orders: [action.payload]
+            }
+        }
+        case ON_SHOW_CHANGE: {
+            console.log(action.payload, " ORDERS_ACTION")
+            let newOrder = {...action.payload, show: !action.payload.show}
+            let newState = {...state, orders: [{...state.orders[0], [action.key]:newOrder}]}
+
+            return {
+                ...newState,
             }
         }
         default:

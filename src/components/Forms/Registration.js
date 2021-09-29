@@ -82,7 +82,6 @@ const Registration = (props) => {
             isValid = value.length >= validation.minLength && isValid
         }
 
-
         return isValid
     }
 
@@ -103,8 +102,11 @@ const Registration = (props) => {
 
     const registerHandler = (event) => {
         event.preventDefault()
-        props.auth(state.formControls.email.value, state.formControls.password.value, props.onSuccessReg)
-        setState(initState)
+        if (state.formControls.email.valid && state.formControls.password.valid) {
+            props.auth(state.formControls.email.value, state.formControls.password.value, props.onSuccessReg)
+            setState(initState)
+            console.log("Валидация успешна")
+        }
     }
 
     return (
